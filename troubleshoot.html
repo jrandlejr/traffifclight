@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Light</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f0f0f0; }
+        svg { margin: 20px auto; display: block; }
+        button { padding: 12px 24px; font-size: 18px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Traffic Light Simulation</h1>
+
+    <svg width="400" height="320">
+        <!-- Pole / housing -->
+        <rect x="10" y="10" width="100" height="300" stroke="black" stroke-width="6" fill="black" />
+
+        <!-- Lights with IDs -->
+        <circle id="redLight"    cx="60" cy="55"  r="40" stroke="darkred"   stroke-width="4" fill="#4d0000" />
+        <circle id="yellowLight" cx="60" cy="150" r="40" stroke="goldenrod" stroke-width="4" fill="#666600" />
+        <circle id="greenLight"  cx="60" cy="250" r="40" stroke="darkgreen" stroke-width="4" fill="#003300" />
+    </svg>
+
+    <button id="nextButton" type="button">Next</button>
+
+    <script>
+        // Wait until the page is fully loaded before running JS
+        window.addEventListener('DOMContentLoaded', () => {
+            const red    = document.getElementById('redLight');
+            const yellow = document.getElementById('yellowLight');
+            const green  = document.getElementById('greenLight');
+            const button = document.getElementById('nextButton');
+
+            if (!red || !yellow || !green || !button) {
+                console.error("One or more elements not found! Check IDs.");
+                return;
+            }
+
+            const colors = {
+                red:    { bright: "red",    dim: "#4d0000" },
+                yellow: { bright: "yellow", dim: "#666600" },
+                green:  { bright: "lime",   dim: "#003300" }
+            };
+
+            const sequence = ["green", "yellow", "red"];
+            let currentIndex = 0;
+
+            function updateLights() {
+                red.setAttribute("fill", colors.red.dim);
+                yellow.setAttribute("fill", colors.yellow.dim);
+                green.setAttribute("fill", colors.green.dim);
+
+                const current = sequence[currentIndex];
+                if (current === "red")    red.setAttribute("fill", colors.red.bright);
+                if (current === "yellow") yellow.setAttribute("fill", colors.yellow.bright);
+                if (current === "green")  green.setAttribute("fill", colors.green.bright);
+            }
+
+            // Start with green bright
+            updateLights();
+
+            // Click handler
+            button.addEventListener("click", () => {
+                currentIndex = (currentIndex + 1) % 3;
+                updateLights();
+                console.log("Next clicked - now on:", sequence[currentIndex]); // for debugging
+            });
+
+            console.log("Traffic light script loaded successfully!");
+        });
+    </script>
+</body>
+</html>
